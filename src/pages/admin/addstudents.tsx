@@ -4,7 +4,7 @@ import { IAddStudent } from "../../utils/interfaces/addstudent.interface";
 import { Role } from "../../utils/constants/enums";
 import { DateInput } from "@mantine/dates";
 import { APIGetClass } from "../../api/class";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const AddStudents = () => {
   const initialFormState: IAddStudent = {
@@ -29,15 +29,19 @@ export const AddStudents = () => {
     resetForm();
   };
 
+  const [classes, setClasses] = useState([]);
   const getClass = async () => {
     try {
       const res = await APIGetClass();
-      console.log(res.data);
+      const classArray = res.data.map((v: any) => v.className);
+      setClasses(classArray);
     } catch (e) {
       console.log(e);
     }
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getClass();
+  }, []);
   console.log("");
   return (
     <>
@@ -105,7 +109,7 @@ export const AddStudents = () => {
                   label="Class"
                   withAsterisk
                   placeholder="Select Section"
-                  data={["A", "B"]}
+                  data={classes}
                 />
               </div>
             </div>
