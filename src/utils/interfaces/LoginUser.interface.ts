@@ -1,0 +1,28 @@
+import { Role } from "../constants/enums";
+
+export interface ILoginUser {
+    readonly username: string
+    readonly password: string
+    readonly role: Role
+}
+
+export interface IRegisterUser {
+    firstname:string,
+    lastname:string,
+    gender:string;
+    dob:string;
+    readonly email: string
+    readonly username: string
+    readonly password: string
+    readonly role: Role
+}
+
+export interface IUserEmail {
+    readonly email: string
+}
+
+export interface IUpdatePassword {
+    readonly email: string
+    readonly newPassword: string
+    readonly confirmNewPassword: string
+}
