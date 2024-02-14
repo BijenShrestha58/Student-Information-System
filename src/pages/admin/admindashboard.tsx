@@ -13,7 +13,7 @@ export const AdminDashboardPage = () => {
     <>
       <div className="h-screen w-full flex flex-col">
         <div className="h-1/5 bg-black px-20 pt-12 text-white flex flex-col w-full flex-col">
-          <div className="mb-10">Hello User!</div>
+          <div className="mb-10">Hello Admin!</div>
           <div className="flex h-20">
             {cardItems.map((v, key) => (
               <div

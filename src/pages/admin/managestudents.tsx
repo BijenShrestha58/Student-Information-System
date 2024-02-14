@@ -5,22 +5,47 @@ import {
   Table,
   Checkbox,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { APIGetStudents } from "../../api/student";
 
 export const ManageStudents = () => {
+  const [students, setStudents] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 12;
+
+  const getStudents = async () => {
+    try {
+      const res = await APIGetStudents();
+      setStudents(res.data);
+      console.log(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // console.log(students);
+
+  useEffect(() => {
+    getStudents();
+  }, []);
+
+  const navigate = useNavigate();
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const dummy = [
-    { name: "Bijen", roll: 21, class: "8", phone: "9860301558" },
-    { name: "Abindra", roll: 8, class: "8", phone: "9812421341" },
-    { name: "Shrutee", roll: 74, class: "9", phone: "892148921" },
-    { name: "Asmi", roll: 20, class: "10", phone: "9851091324" },
-    { name: "Mihir", roll: 33, class: "5", phone: "9860123412" },
-  ];
-  const rows = dummy.map((v) => (
+
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = students.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent
+  );
+
+  const rows = currentStudents.map((student: any) => (
     <Table.Tr
-      key={v.name}
+      key={student.id}
       bg={
-        selectedRows.includes(v.roll)
+        selectedRows.includes(student.rollNo)
           ? "var(--mantine-color-blue-light)"
           : undefined
       }
@@ -28,20 +53,25 @@ export const ManageStudents = () => {
       <Table.Td>
         <Checkbox
           aria-label="Select row"
-          checked={selectedRows.includes(v.roll)}
+          checked={selectedRows.includes(student.rollNo)}
           onChange={(event) =>
             setSelectedRows(
               event.currentTarget.checked
-                ? [...selectedRows, v.roll]
-                : selectedRows.filter((roll) => roll !== v.roll)
+                ? [...selectedRows, student.rollNo]
+                : selectedRows.filter((rollNo) => rollNo !== student.rollNo)
             )
           }
         />
       </Table.Td>
-      <Table.Td>{v.roll}</Table.Td>
-      <Table.Td>{v.name}</Table.Td>
-      <Table.Td>{v.class}</Table.Td>
-      <Table.Td>{v.phone}</Table.Td>
+      <Table.Td>{student.rollNo}</Table.Td>
+      <Table.Td
+        onClick={() => navigate("../profile/" + student.firstName)}
+        style={{ cursor: "pointer" }}
+      >
+        {student.firstName}
+      </Table.Td>
+      <Table.Td>{student.class.className}</Table.Td>
+      <Table.Td>{student.guardianPhone}</Table.Td>
     </Table.Tr>
   ));
   return (
@@ -51,26 +81,26 @@ export const ManageStudents = () => {
           <div className="font-semibold text-2xl ">Manage Students</div>
           <div className="font-semibold">Student / All Students</div>
         </div>
-        <div className="flex items-end mb-4" style={{ height: "10%" }}>
+        {/* <div className="flex items-end mb-4" style={{ height: "10%" }}>
           <div className="flex-grow pr-3">
             <Autocomplete
-              label="Search by Roll Number"
-              placeholder="Roll Number"
+              label="Search by rollNo Number"
+              placeholder="rollNo Number"
               limit={5}
-              data={dummy.map((item) => ({
-                label: `${item.roll}`,
-                value: `${item.roll}`,
+              data={students.map((student: any) => ({
+                label: `${student.rollNo}`,
+                value: `${student.rollNo}`,
               }))}
             />
           </div>
           <div className="flex-grow pl-3 pr-3">
             <Autocomplete
-              label="Search by Name"
-              placeholder="Name"
+              label="Search by firstName"
+              placeholder="firstName"
               limit={5}
-              data={dummy.map((item) => ({
-                label: `${item.name}`,
-                value: `${item.name}`,
+              data={students.map((student: any) => ({
+                label: `${student.firstName}`,
+                value: `${student.firstName}`,
               }))}
             />
           </div>
@@ -79,9 +109,9 @@ export const ManageStudents = () => {
               label="Search by Phone Number"
               placeholder="Phone Number"
               limit={5}
-              data={dummy.map((item) => ({
-                label: `${item.phone}`,
-                value: `${item.phone}`,
+              data={students.map((student: any) => ({
+                label: `${student.phone}`,
+                value: `${student.phone}`,
               }))}
             />
           </div>
@@ -90,7 +120,7 @@ export const ManageStudents = () => {
               SEARCH
             </button>
           </div>
-        </div>
+        </div> */}
         <div
           className="rounded-3xl p-8 bg-white flex flex-col"
           style={{ height: "90%" }}
@@ -110,6 +140,30 @@ export const ManageStudents = () => {
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>{" "}
+            <div className="flex justify-center mt-4">
+              <button
+                className={
+                  currentPage !== 1
+                    ? "bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded mr-2"
+                    : "hidden"
+                }
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                className={
+                  indexOfLastStudent < students.length
+                    ? "bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded"
+                    : "hidden"
+                }
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={indexOfLastStudent >= students.length}
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>

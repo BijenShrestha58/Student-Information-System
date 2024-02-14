@@ -1,33 +1,57 @@
-import { Select, TextInput } from "@mantine/core";
-import { useFormHandler } from "../../utils/helpers/formHandler";
+import React, { useEffect, useState } from "react";
+import { PasswordInput, Select, TextInput } from "@mantine/core";
+// import { useFormHandler } from "../../utils/helpers/formHandler";
 import { IAddStudent } from "../../utils/interfaces/addstudent.interface";
 import { Role } from "../../utils/constants/enums";
 import { DateInput } from "@mantine/dates";
 import { APIGetClass } from "../../api/class";
-import { useEffect, useState } from "react";
+import { APIAddStudent } from "../../api/student";
+import { Alert } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 export const AddStudents = () => {
-  const initialFormState: IAddStudent = {
+  const [student, setStudent] = useState({
     firstName: "",
     lastName: "",
     gender: "",
-    dateOfBirth: new Date("1990-01-01"),
+    dateOfBirth: new Date("2000-01-01"),
     rollNo: "",
-    class: { className: "" },
+    class: "",
     guardianName: "",
     guardianPhone: "",
     address: "",
-    user: { username: "", password: "", role: Role.student },
+    username: "",
+    password: "",
+    role: Role.student,
+  });
+  const icon = <IconInfoCircle />;
+  const formHandler = (e: any) => {
+    const { name, value } = e.target;
+    setStudent((prevStudent) => ({ ...prevStudent, [name]: value }));
   };
-  const { formData, handleInputChange, handleSubmit, resetForm } =
-    useFormHandler<IAddStudent>({ initialState: initialFormState });
 
-  const onSubmit = () => {
-    // Handle form submission logic here, e.g., make an API call
-    console.log("Form submitted with data:", formData);
-    // Optionally, reset the form after submission
-    resetForm();
+  const selectHandler = (fieldName: string, value: any) => {
+    setStudent((prevStudent) => ({
+      ...prevStudent,
+      [fieldName]: value,
+    }));
   };
+
+  const [successAlert, setSuccessAlert] = useState(false);
+
+  const submitForm = async (e: any) => {
+    e.preventDefault();
+    console.log(student);
+    try {
+      const res = await APIAddStudent(student);
+      setSuccessAlert(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  console.log(student);
+  // const { formData, handleInputChange, handleSubmit, resetForm } =
+  //   useFormHandler<IAddStudent>({ initialState: initialFormState });
 
   const [classes, setClasses] = useState([]);
   const getClass = async () => {
@@ -39,12 +63,37 @@ export const AddStudents = () => {
       console.log(e);
     }
   };
+
   useEffect(() => {
     getClass();
   }, []);
-  console.log("");
+
+  // const handleFileInputChange = (event) => {
+  //   // Handle the selected file here
+  //   const selectedFile = event.target.files[0];
+  //   console.log("Selected File:", selectedFile);
+  // };
+
+  // const onSubmit = () => {
+  //   // Handle form submission logic here, e.g., make an API call
+  //   console.log("Form submitted with data:", formData);
+  //   // Optionally, reset the form after submission
+  //   resetForm();
+  // };
+
   return (
     <>
+      {successAlert && (
+        <Alert
+          variant="filled"
+          color="green"
+          withCloseButton
+          closeButtonLabel="Dismiss"
+          title="Student created successfully!"
+          icon={icon}
+          onClose={() => setSuccessAlert(false)}
+        ></Alert>
+      )}
       <div className="h-screen w-full flex flex-col p-8 bg-gray-100">
         <div className="flex justify-between" style={{ height: "10%" }}>
           <div className="font-semibold text-2xl ">Add Students</div>
@@ -55,17 +104,16 @@ export const AddStudents = () => {
           style={{ height: "90%" }}
         >
           <div className="font-semibold text-xl mb-8">Student Information</div>
-          <form className="flex flex-col">
+          <form className="flex flex-col" onSubmit={submitForm}>
             <div className="flex mb-6">
               <div className="w-2/6 pr-2">
                 <TextInput
                   label="First Name"
                   withAsterisk
                   placeholder="Enter First Name"
-                  value={formData.firstName}
-                  onChange={(e) =>
-                    handleInputChange("firstName", e.target.value)
-                  }
+                  value={student.firstName}
+                  name="firstName"
+                  onChange={formHandler}
                 />
               </div>
               <div className="w-2/6 pr-2 pl-2">
@@ -73,10 +121,9 @@ export const AddStudents = () => {
                   label="Last Name"
                   withAsterisk
                   placeholder="Enter Last Name"
-                  value={formData.lastName}
-                  onChange={(e) =>
-                    handleInputChange("lastName", e.target.value)
-                  }
+                  value={student.lastName}
+                  name="lastName"
+                  onChange={formHandler}
                 />
               </div>
               <div className="w-2/6 pl-2">
@@ -85,7 +132,7 @@ export const AddStudents = () => {
                   withAsterisk
                   placeholder="Select Gender"
                   data={["Male", "Female"]}
-                  onChange={(value) => handleInputChange("gender", value)}
+                  onChange={(value) => selectHandler("gender", value)}
                 />
               </div>
             </div>
@@ -95,6 +142,8 @@ export const AddStudents = () => {
                   label="Date of Birth"
                   withAsterisk
                   placeholder="Enter Date of Birth"
+                  value={student.dateOfBirth}
+                  onChange={(value) => selectHandler("dateOfBirth", value)}
                 />
               </div>
               <div className="w-2/6 pr-2 pl-2">
@@ -102,40 +151,84 @@ export const AddStudents = () => {
                   label="Roll Number"
                   withAsterisk
                   placeholder="Enter Roll Number"
+                  value={student.rollNo}
+                  name="rollNo"
+                  onChange={formHandler}
                 />
               </div>
               <div className="w-2/6 pl-2">
                 <Select
                   label="Class"
                   withAsterisk
-                  placeholder="Select Section"
+                  placeholder="Select Class"
                   data={classes}
+                  value={student.class}
+                  onChange={(value) => selectHandler("class", value)}
+                />
+              </div>
+            </div>
+            <div className="flex mb-6">
+              <div className="w-2/6 pr-2">
+                <TextInput
+                  label="Guardian's Name"
+                  withAsterisk
+                  placeholder="Enter Guardian's Name"
+                  value={student.guardianName}
+                  name="guardianName"
+                  onChange={formHandler}
+                />
+              </div>
+              <div className="w-2/6 pr-2 pl-2">
+                <TextInput
+                  label="Guardian's Phone Number"
+                  withAsterisk
+                  placeholder="Enter Guardian's Phone Number"
+                  type="number"
+                  value={student.guardianPhone}
+                  name="guardianPhone"
+                  onChange={formHandler}
+                />
+              </div>
+              <div className="w-2/6 pl-2">
+                <TextInput
+                  label="Address"
+                  placeholder="Enter Address"
+                  value={student.address}
+                  name="address"
+                  onChange={formHandler}
                 />
               </div>
             </div>
             <div className="flex mb-8">
               <div className="w-2/6 pr-2">
-                <DateInput
-                  label="Date of Birth"
+                <TextInput
+                  label="Username"
                   withAsterisk
-                  placeholder="Enter Date of Birth"
+                  placeholder="Enter Username"
+                  name="username"
+                  value={student.username}
+                  onChange={formHandler}
                 />
               </div>
               <div className="w-2/6 pr-2 pl-2">
-                <TextInput
-                  label="Phone Number"
+                <PasswordInput
+                  label="Password"
                   withAsterisk
-                  placeholder="Enter Phone Number"
+                  placeholder="Enter Password"
+                  name="password"
+                  value={student.password}
+                  onChange={formHandler}
                 />
-              </div>
-              <div className="w-2/6 pl-2">
-                <TextInput label="Address" placeholder="Enter Address" />
               </div>
             </div>
             <div className="flex font-semibold">Upload Student Photo</div>
-            <button className="text-white bg-black rounded-lg px-3 py-1 w-28 mb-6 mt-3 hover:-translate-y-0.5 duration-200">
+            <label
+              htmlFor="fileInput"
+              className="text-white bg-black rounded-lg px-3 py-1 w-28 mb-6 mt-3 hover:-translate-y-0.5 duration-200 flex justify-center"
+            >
               Choose File
-            </button>
+            </label>
+            <input type="file" id="fileInput" style={{ display: "none" }} />
             <button className="text-white text-lg bg-blue-600 rounded-lg py-2 w-40 hover:-translate-y-0.5 duration-200">
               Submit
             </button>

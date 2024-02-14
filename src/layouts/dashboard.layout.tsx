@@ -19,8 +19,8 @@ export function DashboardLayout() {
     >
       <AppShell.Header
         style={{
-          backgroundColor: "#121927",
-          color: "#eff2f7",
+          backgroundColor: "rgb(129, 140, 248)",
+          color: "#ffffff",
           borderColor: "gray",
         }}
       >
