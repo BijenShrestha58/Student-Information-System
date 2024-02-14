@@ -5,52 +5,42 @@ import {
   Table,
   Checkbox,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { APIGetTeachers } from "../../api/teacher";
 
 export const ManageTeachers = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const dummy = [
-    {
-      name: "Bijen",
-      id: 21,
-      class: "8",
-      phone: "9860301558",
-      address: "Kathmandu",
-    },
-    {
-      name: "Abindra",
-      id: 8,
-      class: "8",
-      phone: "9812421341",
-      address: "Kathmandu",
-    },
-    {
-      name: "Shrutee",
-      id: 74,
-      class: "9",
-      phone: "892148921",
-      address: "Kathmandu",
-    },
-    {
-      name: "Asmi",
-      id: 20,
-      class: "10",
-      phone: "9851091324",
-      address: "Kathmandu",
-    },
-    {
-      name: "Mihir",
-      id: 33,
-      class: "5",
-      phone: "9860123412",
-      address: "Kathmandu",
-    },
-  ];
-  const rows = dummy.map((v) => (
+  const [teachers, setTeachers] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const teachersPerPage = 10;
+
+  const indexOfLastTeacher = currentPage * teachersPerPage;
+  const indexOfFirstTeacher = indexOfLastTeacher - teachersPerPage;
+  const currentTeachers = teachers.slice(
+    indexOfFirstTeacher,
+    indexOfLastTeacher
+  );
+
+  const getTeachers = async () => {
+    try {
+      const res = await APIGetTeachers();
+      setTeachers(res.data);
+      console.log(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getTeachers();
+  }, []);
+
+  const rows = currentTeachers.map((teacher: any) => (
     <Table.Tr
-      key={v.name}
+      key={teacher.id}
       bg={
-        selectedRows.includes(v.id)
+        selectedRows.includes(teacher.id)
           ? "var(--mantine-color-blue-light)"
           : undefined
       }
@@ -58,21 +48,23 @@ export const ManageTeachers = () => {
       <Table.Td>
         <Checkbox
           aria-label="Select row"
-          checked={selectedRows.includes(v.id)}
+          checked={selectedRows.includes(teacher.id)}
           onChange={(event) =>
             setSelectedRows(
               event.currentTarget.checked
-                ? [...selectedRows, v.id]
-                : selectedRows.filter((id) => id !== v.id)
+                ? [...selectedRows, teacher.id]
+                : selectedRows.filter((id) => id !== teacher.id)
             )
           }
         />
       </Table.Td>
-      <Table.Td>{v.id}</Table.Td>
-      <Table.Td>{v.name}</Table.Td>
-      <Table.Td>{v.class}</Table.Td>
-      <Table.Td>{v.phone}</Table.Td>
-      <Table.Td>{v.address}</Table.Td>
+      <Table.Td>{teacher.id}</Table.Td>
+      <Table.Td>
+        {teacher.firstName} {teacher.lastName}
+      </Table.Td>
+      <Table.Td>{teacher.qualification}</Table.Td>
+      <Table.Td>{teacher.mobile}</Table.Td>
+      <Table.Td>{teacher.address}</Table.Td>
     </Table.Tr>
   ));
   return (
@@ -88,9 +80,9 @@ export const ManageTeachers = () => {
               label="Search by ID"
               placeholder="ID"
               limit={5}
-              data={dummy.map((item) => ({
-                label: `${item.id}`,
-                value: `${item.id}`,
+              data={teachers.map((teacher: any) => ({
+                label: `${teacher.id}`,
+                value: `${teacher.id}`,
               }))}
             />
           </div>
@@ -99,9 +91,9 @@ export const ManageTeachers = () => {
               label="Search by Name"
               placeholder="Name"
               limit={5}
-              data={dummy.map((item) => ({
-                label: `${item.name}`,
-                value: `${item.name}`,
+              data={teachers.map((teacher: any) => ({
+                label: `${teacher.firstName}`,
+                value: `${teacher.firstName}`,
               }))}
             />
           </div>
@@ -110,9 +102,9 @@ export const ManageTeachers = () => {
               label="Search by Phone Number"
               placeholder="Phone Number"
               limit={5}
-              data={dummy.map((item) => ({
-                label: `${item.phone}`,
-                value: `${item.phone}`,
+              data={teachers.map((teacher: any) => ({
+                label: `${teacher.mobile}`,
+                value: `${teacher.mobile}`,
               }))}
             />
           </div>
@@ -135,13 +127,37 @@ export const ManageTeachers = () => {
                   <Table.Th />
                   <Table.Th>ID</Table.Th>
                   <Table.Th>Name</Table.Th>
-                  <Table.Th>Class</Table.Th>
+                  <Table.Th>Qualification</Table.Th>
                   <Table.Th>Phone Number</Table.Th>
                   <Table.Th>Address</Table.Th>
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>{" "}
+            <div className="flex justify-center mt-4">
+              <button
+                className={
+                  currentPage !== 1
+                    ? "bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded mr-2"
+                    : "hidden"
+                }
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                className={
+                  indexOfLastTeacher < teachers.length
+                    ? "bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded"
+                    : "hidden"
+                }
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={indexOfLastTeacher >= teachers.length}
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>
