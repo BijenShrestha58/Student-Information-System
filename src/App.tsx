@@ -11,18 +11,18 @@ import { useEffect } from "react";
 import { saveUser } from "./utils/helpers/tokenStorage.helper.ts";
 
 function App() {
-  const getUserData = async () => {
-    try {
-      const res = await APIGetMyDetails();
-      saveUser(res.data);
-      console.log(res.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  useEffect(() => {
-    getUserData();
-  }, []);
+  // const getUserData = async () => {
+  //   try {
+  //     const res = await APIGetMyDetails();
+  //     saveUser(res.data);
+  //     console.log(res.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getUserData();
+  // }, []);
   return (
     <>
       <Provider store={store}>

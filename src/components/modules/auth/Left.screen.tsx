@@ -9,7 +9,7 @@ export const LeftScreen = () => {
         className="font-bold cursor-pointer duration-200 hover:text-white"
         onClick={() => navigate("/")}
       >
-        Medium
+        Student Information System
       </div>
     </div>
   );

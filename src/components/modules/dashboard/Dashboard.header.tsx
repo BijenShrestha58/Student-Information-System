@@ -59,10 +59,10 @@ export function DashboardHeader() {
             ]}
             visibleFrom="xs"
           />
-          <div className="border-l border-r px-3 border-gray-300 text-gray-300">
+          <div className="border-l border-r px-3 border-gray-300 text-white">
             <Icon name="notifications" />
           </div>
-          <div className=" border-r pl-3 pr-3 border-gray-300 text-gray-300">
+          <div className=" border-r pl-3 pr-3 border-gray-300 text-white">
             <Icon name="settings" />
           </div>
         </Group>
