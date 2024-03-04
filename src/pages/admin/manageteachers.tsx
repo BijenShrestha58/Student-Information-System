@@ -7,8 +7,10 @@ import {
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { APIGetTeachers } from "../../api/teacher";
+import { useNavigate } from "react-router";
 
 export const ManageTeachers = () => {
+  const navigate = useNavigate();
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [teachers, setTeachers] = useState([]);
 
@@ -59,12 +61,15 @@ export const ManageTeachers = () => {
         />
       </Table.Td>
       <Table.Td>{teacher.id}</Table.Td>
-      <Table.Td>
+      <Table.Td
+        onClick={() => navigate("../teacherprofile/" + teacher.id)}
+        style={{ cursor: "pointer" }}
+      >
         {teacher.firstName} {teacher.lastName}
       </Table.Td>
       <Table.Td>{teacher.qualification}</Table.Td>
       <Table.Td>{teacher.mobile}</Table.Td>
-      <Table.Td>{teacher.address}</Table.Td>
+      <Table.Td>{teacher.address.address}</Table.Td>
     </Table.Tr>
   ));
   return (

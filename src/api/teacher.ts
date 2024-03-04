@@ -7,3 +7,7 @@ export const APIGetTeachers =()=>{
 export const APIAddTeacher=(data:IAddTeacher)=>{
     return PostRequest("/teacher", data)
 }
+
+export const APIGetTeacherById=(id:string)=>{
+    return GetRequest("/teacher/"+id)
+}

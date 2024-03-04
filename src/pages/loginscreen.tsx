@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
 import { LeftScreen } from "../components/modules/auth/Left.screen";
 import { ILoginUser } from "../utils/interfaces/LoginUser.interface";
@@ -9,18 +9,20 @@ import { APIGetMyDetails } from "../api/auth";
 import { saveUser } from "../utils/helpers/tokenStorage.helper";
 
 export const SignInScreen = () => {
+  const roleParam = useParams();
   const navigate = useNavigate();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const PasswordVisibilityHandler = () => {
     setPasswordVisibility(!passwordVisibility);
   };
+
   const [user, setUser] = useState<ILoginUser>({
     username: "",
     password: "",
-    role: Role.admin,
+    role: Role[roleParam.role as keyof typeof Role],
   });
   const dispatch: any = useDispatch();
-
+  console.log(user.role);
   const formHandler = (e: any) => {
     setUser({
       ...user,

@@ -65,7 +65,7 @@ export const ManageStudents = () => {
       </Table.Td>
       <Table.Td>{student.rollNo}</Table.Td>
       <Table.Td
-        onClick={() => navigate("../profile/" + student.firstName)}
+        onClick={() => navigate("../profile/" + student.id)}
         style={{ cursor: "pointer" }}
       >
         {student.firstName}

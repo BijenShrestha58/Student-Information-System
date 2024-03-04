@@ -16,3 +16,10 @@ export const generatePageArray = (limit: number, count: number): number[] => {
     }
     return val
 }
+
+export const separateArrays = (array: any[], property1: string, property2: string) => {
+    const newArr1 = array.map((v: any) => v[property1]);
+    const newArr2 = array.map((v: any) => v[property2]);
+  
+    return { newArr1, newArr2 };
+  };
