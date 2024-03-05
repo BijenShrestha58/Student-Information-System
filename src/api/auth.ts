@@ -27,10 +27,3 @@ export const APIGetMyDetails = ()=>{
     return GetRequest('user/me');
 }
 
-export const APIGetSDOHQuestions = ()=>{
-    return GetRequest('/patient/getAllSdh')
-}
-
-export const APICreatePatient = (data:any)=>{
-    return PostRequest('/patient',data)
-}

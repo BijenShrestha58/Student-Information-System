@@ -23,3 +23,10 @@ export const separateArrays = (array: any[], property1: string, property2: strin
   
     return { newArr1, newArr2 };
   };
+
+  export const calculateSliceRange = (selectedClass: string) => {
+    const classNumber = parseInt(selectedClass, 10);
+    const start = (classNumber - 1) * 5;
+    const end = start + 4;
+    return { start, end };
+  };

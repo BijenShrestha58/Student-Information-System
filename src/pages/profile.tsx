@@ -1,33 +1,96 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { APIGetStudentById } from "../api/student";
 import { useEffect, useState } from "react";
 import { DateFormatter } from "../utils/helpers/dateformatter";
 import { CapitalizeFirstLetter } from "../utils/helpers/capitalize";
+import { IStudent } from "../utils/interfaces/addstudent.interface";
+import { Role } from "../utils/constants/enums";
+import { APIGetPercentageByStudentId } from "../api/marks";
+import Chart from "chart.js/auto";
+import { Line } from "react-chartjs-2";
+import { CategoryScale } from "chart.js";
+import { Calendar } from "@mantine/dates";
+
+Chart.register(CategoryScale);
 
 const Profile = () => {
   const { id = "" } = useParams();
-  const [student, setStudent] = useState({});
+  const navigate = useNavigate();
+  const initialStudent: IStudent = {
+    id: null!,
+    firstName: "",
+    lastName: "",
+    gender: "",
+    dateOfBirth: "",
+    rollNo: "",
+    guardianName: "",
+    guardianPhone: "",
+    address: "",
+    createdAt: "",
+    updatedAt: "",
+    class: {
+      id: null!,
+      className: "",
+    },
+    user: {
+      id: null!,
+      username: "",
+      role: Role.student,
+      createdAt: "",
+      updatedAt: "",
+    },
+  };
+  interface IPercentageData {
+    academicYear: string;
+    percentage: string;
+  }
+  const [student, setStudent] = useState<IStudent>(initialStudent);
+  const [percentageData, setPercentageData] = useState<IPercentageData[]>([
+    { academicYear: "", percentage: "" },
+  ]);
+  const getPercentageByStudentId = async () => {
+    try {
+      const res = await APIGetPercentageByStudentId(id);
+      setPercentageData(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const getStudentDetails = async () => {
     const res = await APIGetStudentById(id);
     setStudent(res.data);
   };
   useEffect(() => {
     getStudentDetails();
+    getPercentageByStudentId();
   }, [id]);
 
-  console.log(student);
+  console.log(percentageData);
+
   return (
     <div className="py-8 px-20 h-full">
-      <div className="flex items-center justify-between mb-4">
-        <div className="font-semibold lg:text-4xl md:text-xl text-base">
+      <div className="flex items-center mb-4">
+        <div className="font-semibold lg:text-4xl md:text-xl text-base mr-16">
           Profile
         </div>
-        <a
-          href="/edit-profile"
-          className="text-blue-900 bg-gray-300 hover:text-white hover:bg-blue-900 border-none text-base font-bold py-1 px-2  cursor-pointer rounded-lg no-underline"
+        <div
+          className="text-blue-900 bg-gray-300 hover:text-white hover:bg-blue-900 border-none text-base font-bold py-1 px-2  cursor-pointer rounded-lg no-underline mr-8"
+          onClick={() => navigate("../marks/" + id)}
         >
-          Edit Profile
-        </a>
+          View Marks
+        </div>
+        <div
+          className="text-blue-900 bg-gray-300 hover:text-white hover:bg-blue-900 border-none text-base font-bold py-1 px-2  cursor-pointer rounded-lg no-underline mr-8"
+          onClick={() => navigate("../attendance-logs/" + id)}
+        >
+          View attendance logs
+        </div>
+        <div
+          className="text-blue-900 bg-gray-300 hover:text-white hover:bg-blue-900 border-none text-base font-bold py-1 px-2  cursor-pointer rounded-lg no-underline"
+          onClick={() => navigate("../attendance-table/" + id)}
+        >
+          View attendance report
+        </div>
       </div>
       <div className="flex w-full h-full">
         <section className="w-1/2">
@@ -56,6 +119,12 @@ const Profile = () => {
                 <div className="text-base font-bold w-1/2">Roll Number:</div>
                 <div className="text-base font-bold w-1/2">
                   {student.rollNo}
+                </div>
+              </div>
+              <div className="flex mb-2">
+                <div className="text-base font-bold w-1/2">Class:</div>
+                <div className="text-base font-bold w-1/2">
+                  {student.class.className}
                 </div>
               </div>
               <div className="flex mb-2">
@@ -103,10 +172,29 @@ const Profile = () => {
         </section>
         <section className="w-1/2 px-8 flex flex-col">
           <div className="rounded bg-white border w-full h-1/2 p-2 font-semibold mb-2">
-            <div>title</div>
+            <Line
+              data={{
+                labels: percentageData.map((item) => item.academicYear),
+                datasets: [
+                  {
+                    label: "Percentage By Academic Year",
+                    data: percentageData.map((item) => item.percentage),
+                  },
+                ],
+              }}
+            />
           </div>
-          <div className="rounded bg-white border w-full h-1/2 p-2 font-semibold">
-            <div>title</div>
+          <div className="rounded bg-white border w-full h-1/2 p-2 font-semibold flex justify-center">
+            <style>
+              {`
+          /* Your custom styling here */
+          .mantine-Calendar-day[data-day="2024-03-02"] {
+            background-color: green;
+            color: white; /* Optional: Change text color for better visibility */
+          }
+        `}
+            </style>
+            <Calendar />
           </div>
         </section>
       </div>

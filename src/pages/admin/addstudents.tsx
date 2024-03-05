@@ -221,14 +221,14 @@ export const AddStudents = () => {
                 />
               </div>
             </div>
-            <div className="flex font-semibold">Upload Student Photo</div>
+            {/* <div className="flex font-semibold">Upload Student Photo</div>
             <label
               htmlFor="fileInput"
               className="text-white bg-black rounded-lg px-3 py-1 w-28 mb-6 mt-3 hover:-translate-y-0.5 duration-200 flex justify-center"
             >
               Choose File
             </label>
-            <input type="file" id="fileInput" style={{ display: "none" }} />
+            <input type="file" id="fileInput" style={{ display: "none" }} /> */}
             <button className="text-white text-lg bg-blue-600 rounded-lg py-2 w-40 hover:-translate-y-0.5 duration-200">
               Submit
             </button>

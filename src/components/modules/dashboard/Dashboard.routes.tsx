@@ -8,6 +8,9 @@ import { AddSubjects } from "../../../pages/admin/addsubjects";
 import { ManageSubjects } from "../../../pages/admin/managesubjects";
 import Profile from "../../../pages/profile";
 import TeacherProfile from "../../../pages/teacherprofile";
+import { MarksTable } from "../../../pages/admin/markstable";
+import { AttendanceLogsTable } from "../../../pages/admin/attendancelogs";
+import { AttendanceTable } from "../../../pages/admin/attendancetable";
 export const DashboardRoutes = () => {
   const DashboardRoutesList = [
     { path: "/", element: <AdminDashboardPage /> },
@@ -19,6 +22,9 @@ export const DashboardRoutes = () => {
     { path: "/managesubjects", element: <ManageSubjects /> },
     { path: "/profile/:id", element: <Profile /> },
     { path: "/teacherprofile/:id", element: <TeacherProfile /> },
+    { path: "/marks/:id", element: <MarksTable /> },
+    { path: "/attendance-logs/:id", element: <AttendanceLogsTable /> },
+    { path: "/attendance-table/:id", element: <AttendanceTable /> },
     { path: "*", element: <Navigate to="./" replace /> },
   ];
   return (

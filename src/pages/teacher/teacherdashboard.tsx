@@ -17,7 +17,7 @@ import {
 } from "../../api/attendance";
 import { Bar } from "react-chartjs-2";
 
-export const AdminDashboardPage = () => {
+export const TeacherDashboardPage = () => {
   const [totalStudents, setTotalStudents] = useState(0);
   const [countByClass, setCountByClass] = useState<any>([]);
   const [countByGender, setCountByGender] = useState<any>([]);

@@ -79,7 +79,7 @@ export const ManageTeachers = () => {
           <div className="font-semibold text-2xl ">Manage Teachers</div>
           <div className="font-semibold">Teacher / All Teachers</div>
         </div>
-        <div className="flex items-end mb-4" style={{ height: "10%" }}>
+        {/* <div className="flex items-end mb-4" style={{ height: "10%" }}>
           <div className="flex-grow pr-3">
             <Autocomplete
               label="Search by ID"
@@ -118,7 +118,7 @@ export const ManageTeachers = () => {
               SEARCH
             </button>
           </div>
-        </div>
+        </div> */}
         <div
           className="rounded-3xl p-8 bg-white flex flex-col"
           style={{ height: "90%" }}
