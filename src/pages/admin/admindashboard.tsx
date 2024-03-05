@@ -252,7 +252,7 @@ export const AdminDashboardPage = () => {
   return (
     <>
       <div className="h-screen w-full flex flex-col">
-        <div className="h-1/5 bg-gray-700 px-20 pt-12 text-white flex flex-col w-full flex-col">
+        <div className="h-1/5 bg-gray-700 px-20 pt-12 text-white flex flex-col w-full">
           <div className="mb-10"></div>
           <div className="flex h-20">
             {cardItems?.map((v, key) => (
