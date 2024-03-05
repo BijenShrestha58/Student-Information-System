@@ -15,3 +15,11 @@ export interface ISubjectResult {
   passmarks: number;
   result: "PASS" | "FAIL";
 }
+
+export interface IPostMarks {
+  student_id: number;
+  subjectName: string;
+  classId: number;
+  academicYear: string;
+  marksObtained: number;
+}

@@ -123,6 +123,14 @@ export const ManageStudents = () => {
       <Table.Td>{student.class.className}</Table.Td>
       <Table.Td>{student.guardianName}</Table.Td>
       <Table.Td>{student.guardianPhone}</Table.Td>
+      <Table.Td>
+        <div
+          className="bg-blue-200 hover:cursor-pointer rounded flex h-8 items-center justify-center"
+          onClick={() => navigate("../add-marks/" + student.id)}
+        >
+          Add Marks
+        </div>
+      </Table.Td>
     </Table.Tr>
   ));
   return (

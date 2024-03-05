@@ -11,6 +11,7 @@ import TeacherProfile from "../../../pages/teacherprofile";
 import { MarksTable } from "../../../pages/admin/markstable";
 import { AttendanceLogsTable } from "../../../pages/admin/attendancelogs";
 import { AttendanceTable } from "../../../pages/admin/attendancetable";
+import { AddMarks } from "../../../pages/admin/addmarks";
 export const DashboardRoutes = () => {
   const DashboardRoutesList = [
     { path: "/", element: <AdminDashboardPage /> },
@@ -25,6 +26,7 @@ export const DashboardRoutes = () => {
     { path: "/marks/:id", element: <MarksTable /> },
     { path: "/attendance-logs/:id", element: <AttendanceLogsTable /> },
     { path: "/attendance-table/:id", element: <AttendanceTable /> },
+    { path: "/add-marks/:id", element: <AddMarks /> },
     { path: "*", element: <Navigate to="./" replace /> },
   ];
   return (
