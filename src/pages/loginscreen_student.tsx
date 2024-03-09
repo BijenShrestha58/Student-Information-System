@@ -1,5 +1,9 @@
 import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { ILoginUser } from "../utils/interfaces/LoginUser.interface";
+import { authenticateUser } from "../store/modules/auth/actions";
+import { APIGetStudentById, APIGetStudentByUsername } from "../api/student";
 
 export const SignInScreenStudent = () => {
   const navigate = useNavigate();
@@ -9,11 +13,13 @@ export const SignInScreenStudent = () => {
     setPasswordVisibility(!passwordVisibility);
   };
 
-  const [user, setUser] = useState({
+  const [user, setUser] = useState<ILoginUser>({
     username: "",
     password: "",
+    // role: Role[roleParam.role as keyof typeof Role],
   });
-
+  const dispatch: any = useDispatch();
+  // console.log(user.role);
   const formHandler = (e: any) => {
     setUser({
       ...user,
@@ -23,22 +29,19 @@ export const SignInScreenStudent = () => {
 
   const submitForm = async (e: any) => {
     e.preventDefault();
-
-    const { username, password } = user;
-
-    if (username === "abindra" && password === "admin") {
-      navigate("../../student/profile/" + 246)
-    } else if (username === "bijen" && password === "admin") {
-      navigate("/student");
-    } else if (username === "shrutee" && password === "admin") {
-      navigate("/student");
-    } else if (username === "asmi" && password === "admin") {
-      navigate("/student");
-    } else {
-      console.log("Incorrect credentials");
+    // navigate("/dashboard");
+    try {
+      const res: any = await dispatch(authenticateUser(user));
+      console.log(res);
+      const userDetails = await APIGetStudentByUsername(res.data.user.username);
+      console.log(userDetails);
+      res
+        ? navigate("/profile/" + userDetails.data.id)
+        : console.log("Incorrect credentials");
+    } catch (e) {
+      alert(e);
     }
   };
-
   return (
     <div className="w-screen h-screen font-sans flex items-center justify-center relative bg-gradient-to-b from-blue-800 via-blue-400 to-blue-800">
       <div className="w-3/5 absolute right-0 h-full rounded-l-2xl bg-white px-24 py-10">

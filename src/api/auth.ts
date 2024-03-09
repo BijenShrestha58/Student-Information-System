@@ -4,11 +4,7 @@ import { IAddStudent } from "../utils/interfaces/addstudent.interface";
 import { IAddTeacher } from "../utils/interfaces/addteacher.interface";
 
 export const APIAuthenticateUser = (data: ILoginUser)=>{
-    return PostRequest('user/login', data);
-}
-
-export const APIRegisterUser = (data: IRegisterUser)=>{
-    return PostRequest('user/register', data);
+    return PostRequest('/authentication', data);
 }
 
 export const APIForgetPassword = (data: IUserEmail)=>{
@@ -23,7 +19,7 @@ export const APIUpdatePassword = (data: IUpdatePassword)=>{
     return PutRequest('user/update-password',data);
 }
 
-export const APIGetMyDetails = ()=>{
-    return GetRequest('user/me');
-}
+// export const APIGetMyDetails = ()=>{
+//     return GetRequest('user/me');
+// }
 

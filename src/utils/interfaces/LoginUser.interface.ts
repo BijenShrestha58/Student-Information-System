@@ -3,7 +3,6 @@ import { Role } from "../constants/enums";
 export interface ILoginUser {
     readonly username: string
     readonly password: string
-    readonly role: Role
 }
 
 export interface IRegisterUser {

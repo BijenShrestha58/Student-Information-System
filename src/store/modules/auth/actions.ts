@@ -3,7 +3,6 @@ import {SET_AUTH_DATA, SET_TOKEN, SET_USER} from "./actionTypes";
 import {
     APIAuthenticateUser,
     APIForgetPassword,
-    APIRegisterUser,
     APIUpdatePassword,
     APIVerifyEmail
 } from "../../../api/auth";
@@ -45,16 +44,13 @@ export const authenticateUser = (user: ILoginUser) => async (dispatch: any) => {
     const res: any = await APIAuthenticateUser(user);
     if (res) {
         dispatch(setAuthData({user: res.data, authentication: res['authentication']}));
-        saveToken(res.token?.token);
+        saveToken(res.data.accesstoken);
         saveUser(res.data);
-        setAuthorizationHeader(res.token?.token);
+        setAuthorizationHeader(res.data?.accesstoken);
     }
     return res;
 }
 
-export const createUser = (user: IRegisterUser) => async (dispatch: any) => {
-    const res = await APIRegisterUser(user);
-}
 
 export const forgetPassword = (data: IUserEmail) => {
     const res = APIForgetPassword(data);

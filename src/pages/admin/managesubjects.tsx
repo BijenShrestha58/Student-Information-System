@@ -5,11 +5,35 @@ import {
   Table,
   Checkbox,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { APIGetAllSubjects } from "../../api/subject";
 
 export const ManageSubjects = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
+  const [subjects, setSubjects] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 12;
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentSubjects = subjects.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent
+  );
+
+  const getAllSubjects = async () => {
+    try {
+      const res = await APIGetAllSubjects();
+      setSubjects(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getAllSubjects();
+  }, []);
+  console.log(subjects);
   const dummy = [
     {
       name: "Science",
@@ -38,31 +62,31 @@ export const ManageSubjects = () => {
     },
   ];
 
-  const rows = dummy.map((v) => (
+  const rows = currentSubjects.map((v: any) => (
     <Table.Tr
-      key={v.name}
+      key={v.subjectName}
       bg={
-        selectedRows.includes(v.id)
+        selectedRows.includes(v.subjectId)
           ? "var(--mantine-color-blue-light)"
           : undefined
       }
     >
       <Table.Td>
-        <Checkbox
+        {/* <Checkbox
           aria-label="Select row"
-          checked={selectedRows.includes(v.id)}
+          checked={selectedRows.includes(v.subjectId)}
           onChange={(event) =>
             setSelectedRows(
               event.currentTarget.checked
-                ? [...selectedRows, v.id]
-                : selectedRows.filter((id) => id !== v.id)
+                ? [...selectedRows, v.subjectId]
+                : selectedRows.filter((subjectId) => subjectId !== v.subjectId)
             )
           }
-        />
+        /> */}
       </Table.Td>
-      <Table.Td>{v.id}</Table.Td>
-      <Table.Td>{v.name}</Table.Td>
-      <Table.Td>{v.class}</Table.Td>
+      <Table.Td>{v.subjectId}</Table.Td>
+      <Table.Td>{v.subjectName}</Table.Td>
+      <Table.Td>{v.class.className}</Table.Td>
     </Table.Tr>
   ));
   return (
@@ -72,7 +96,7 @@ export const ManageSubjects = () => {
           <div className="font-semibold text-2xl ">Manage Subjects</div>
           <div className="font-semibold">Subject / All Subjects</div>
         </div>
-        <div className="flex items-end mb-4" style={{ height: "10%" }}>
+        {/* <div className="flex items-end mb-4" style={{ height: "10%" }}>
           <div className="flex-grow pr-3">
             <Autocomplete
               label="Search by ID"
@@ -105,7 +129,7 @@ export const ManageSubjects = () => {
               SEARCH
             </button>
           </div>
-        </div>
+        </div> */}
         <div
           className="rounded-3xl p-8 bg-white flex flex-col"
           style={{ height: "90%" }}
@@ -124,6 +148,30 @@ export const ManageSubjects = () => {
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>{" "}
+            <div className="flex justify-center mt-4">
+              <button
+                className={
+                  currentPage !== 1
+                    ? "bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded mr-2"
+                    : "hidden"
+                }
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                className={
+                  indexOfLastStudent < selectedRows.length
+                    ? "bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded"
+                    : "hidden"
+                }
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={indexOfLastStudent >= selectedRows.length}
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>

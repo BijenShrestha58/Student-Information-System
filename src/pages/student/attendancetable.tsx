@@ -61,7 +61,7 @@ export const AttendanceTable = () => {
 
   const getFinalAttendanceByStudentId = async () => {
     try {
-      const res = await APIGetFinalAttendanceByStudentId("246");
+      const res = await APIGetFinalAttendanceByStudentId(id);
       setAttendanceData(res.data);
     } catch (e) {
       console.log(e);
@@ -69,7 +69,7 @@ export const AttendanceTable = () => {
   };
   const getStudentById = async () => {
     try {
-      const res = await APIGetStudentById("246");
+      const res = await APIGetStudentById(id);
       setStudent(res.data);
     } catch (e) {
       console.log(e);

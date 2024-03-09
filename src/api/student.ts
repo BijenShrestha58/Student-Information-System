@@ -28,3 +28,6 @@ export const APIGetGenderByClass=()=>{
     return GetRequest("/student/gender-by-class")
 }
 
+export const APIGetStudentByUsername=(username:string)=>{
+    return GetRequest("/student/byUsername/"+username)
+}

@@ -7,7 +7,7 @@ Chart.register(CategoryScale);
 export const LineChart = (props: any) => {
   const data = [
     {
-      day: "Monday",
+      day: "Wednesday",
       class1: 30,
       class2: 25,
       class3: 28,
@@ -20,7 +20,7 @@ export const LineChart = (props: any) => {
       class10: 24,
     },
     {
-      day: "Tuesday",
+      day: "Thursday",
       class1: 32,
       class2: 26,
       class3: 29,
@@ -33,7 +33,7 @@ export const LineChart = (props: any) => {
       class10: 26,
     },
     {
-      day: "Wednesday",
+      day: "Friday",
       class1: 31,
       class2: 24,
       class3: 27,
@@ -46,7 +46,7 @@ export const LineChart = (props: any) => {
       class10: 23,
     },
     {
-      day: "Thursday",
+      day: "Sunday",
       class1: 33,
       class2: 28,
       class3: 30,
@@ -59,7 +59,7 @@ export const LineChart = (props: any) => {
       class10: 28,
     },
     {
-      day: "Friday",
+      day: "Monday",
       class1: 30,
       class2: 23,
       class3: 26,
@@ -88,7 +88,7 @@ export const LineChart = (props: any) => {
   ];
 
   const datasets = classKeys.map((classKey, index) => ({
-    label: `Class ${classKey.slice(-1)}`,
+    label: `Class ${index + 1}`,
     data: data.map((item: any) => item[classKey]),
     borderColor: lineColors[index % lineColors.length],
     backgroundColor: lineColors[index % lineColors.length],

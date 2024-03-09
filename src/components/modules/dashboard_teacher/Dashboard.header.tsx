@@ -5,14 +5,17 @@ import { IconSearch } from "@tabler/icons-react";
 import classes from "./HeaderSearch.module.css";
 import { Logo } from "../../common/Logo";
 import { Icon } from "../../common/icons";
+import { useNavigate } from "react-router";
+import { logoutUser } from "../../../store/modules/auth/actions";
 
 const links = [
-  { link: "/", label: "Overview" },
-  { link: "/dashboard/managestudents", label: "Student's List" },
-  { link: "/", label: "Reports" },
+  { link: "/teacher", label: "Overview" },
+  { link: "/teacher/managestudents", label: "Student's List" },
+  { link: "/teacher/manageteachers", label: "Teacher's List" },
 ];
 
 export function DashboardHeader() {
+  const navigate = useNavigate();
   const [opened, { toggle }] = useDisclosure(false);
 
   const items = links.map((link) => (
@@ -20,7 +23,7 @@ export function DashboardHeader() {
       key={link.label}
       href={link.link}
       className="hover:text-green-300 duration-200"
-      onClick={(event) => event.preventDefault()}
+      onClick={() => navigate(`${link.link}`)}
     >
       {link.label}
     </a>
@@ -38,7 +41,7 @@ export function DashboardHeader() {
           <Group ml={50} gap={24} className={classes.links} visibleFrom="sm">
             {items}
           </Group>
-          <Autocomplete
+          {/* <Autocomplete
             className="ml-80 mr-3"
             placeholder="Search..."
             leftSection={
@@ -61,7 +64,16 @@ export function DashboardHeader() {
         
           <div className=" border-r pl-3 pr-3 border-gray-300 text-white">
             <Icon name="settings" />
-          </div>
+          </div> */}
+          <button
+            className="absolute right-16"
+            onClick={() => {
+              logoutUser();
+              navigate("/");
+            }}
+          >
+            Log Out
+          </button>
         </Group>
       </div>
     </header>

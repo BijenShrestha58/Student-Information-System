@@ -105,14 +105,7 @@ const TeacherProfile = () => {
             </div>
           </div>
         </section>
-        <section className="w-1/2 px-8 flex flex-col">
-          <div className="rounded bg-white border w-full h-1/2 p-2 font-semibold mb-2">
-            <div>title</div>
-          </div>
-          <div className="rounded bg-white border w-full h-1/2 p-2 font-semibold">
-            <div>title</div>
-          </div>
-        </section>
+        <section className="w-1/2 px-8 flex flex-col"></section>
       </div>
     </div>
   );

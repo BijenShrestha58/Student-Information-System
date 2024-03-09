@@ -5,7 +5,7 @@ import { ILoginUser } from "../utils/interfaces/LoginUser.interface";
 import { Role } from "../utils/constants/enums";
 import { authenticateUser } from "../store/modules/auth/actions";
 import { useDispatch } from "react-redux";
-import { APIGetMyDetails } from "../api/auth";
+// import { APIGetMyDetails } from "../api/auth";
 import { saveUser } from "../utils/helpers/tokenStorage.helper";
 
 export const SignInScreen = () => {
@@ -19,10 +19,10 @@ export const SignInScreen = () => {
   const [user, setUser] = useState<ILoginUser>({
     username: "",
     password: "",
-    role: Role[roleParam.role as keyof typeof Role],
+    // role: Role[roleParam.role as keyof typeof Role],
   });
   const dispatch: any = useDispatch();
-  console.log(user.role);
+  // console.log(user.role);
   const formHandler = (e: any) => {
     setUser({
       ...user,
@@ -32,14 +32,13 @@ export const SignInScreen = () => {
 
   const submitForm = async (e: any) => {
     e.preventDefault();
-    navigate("/dashboard");
+    // navigate("/dashboard");
     try {
       const res: any = await dispatch(authenticateUser(user));
-      const userDetails = await APIGetMyDetails();
-      saveUser(userDetails.data);
-      res ? navigate("/fyp") : console.log("Incorrect credentials");
+      console.log(res);
+      res ? navigate("/dashboard") : console.log("Incorrect credentials");
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   };
 

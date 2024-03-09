@@ -5,17 +5,16 @@ import { MarksTable } from "../../../pages/student/markstable";
 import { AttendanceLogsTable } from "../../../pages/student/attendancelogs";
 import { AttendanceTable } from "../../../pages/student/attendancetable";
 import { StudentDashboardPage } from "../../../pages/student/studentdashboard";
-import ProfileAbindra from "../../../pages/profile_abindra";
 export const DashboardRoutes = () => {
   const DashboardRoutesList = [
     // { path: "/", element: <StudentDashboardPage /> },
     { path: "/managestudents", element: <ManageStudents /> },
     { path: "/profile/:id", element: <Profile /> },
-    { path: "/", element: <ProfileAbindra /> },
-    { path: "/marks/:id", element: <MarksTable /> },
+    { path: "./student/attendance-logs/:id", element: <AttendanceLogsTable /> },
+    // { path: "./attendance-table/:id", element: <AttendanceTable /> },
+    { path: "./marks/:id", element: <MarksTable /> },
     { path: "/attendance-logs/:id", element: <AttendanceLogsTable /> },
     { path: "/attendance-table/:id", element: <AttendanceTable /> },
-    { path: "*", element: <Navigate to="./" replace /> },
   ];
   return (
     <>
